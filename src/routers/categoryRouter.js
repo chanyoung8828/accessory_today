@@ -31,4 +31,31 @@ categoryRouter.delete("/categorys", async (req, res) => {
   }
 });
 
+//전체 카테고리 조회
+
+categoryRouter.get("/categorys", async (req, res) => {
+  try {
+    const allCategories = await categoryService.getAllCategories();
+    return res.json(allCategories);
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// 카테고리 수정
+categoryRouter.patch("/categorys/:categoryId", async (req, res) => {
+  const categoryId = parseInt(req.params.categoryId, 10);
+  const updatedCategory = req.body; // 수정된 카테고리 데이터
+
+  try {
+    const result = await categoryService.patchCategory(
+      categoryId,
+      updatedCategory
+    );
+    return res.json(result);
+  } catch (err) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 export { categoryRouter };
